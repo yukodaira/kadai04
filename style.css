@@ -1,0 +1,31 @@
+body {
+    font-family: 'Water Brush', cursive;
+    }
+
+h1 {
+    color: greenyellow;
+    text-align: center;
+}
+
+div {
+    text-align: center;
+}
+
+textarea {
+    vertical-align:top;
+}
+
+button {
+    margin-bottom: 54px;
+}
+
+#uname {
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+#text {
+    margin-top: 8px;
+}
+
+

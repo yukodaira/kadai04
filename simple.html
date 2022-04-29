@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Firebase:v9:Chatアプリ</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+
+<div>
+  <h1>messager</h1>
+    <div>unname<input type="text" id="uname"> </div>
+    <div>
+        <textarea id="text" cols="30" rows="10"></textarea>
+        <button id="send">sent</button>
+    </div>
+    <div id="output"></div>
+    <!-- 登録されたデータをjsで表示するエリアのこと -->
+</div>
+<!--/ コンテンツ表示画面 -->
+
+
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- JQuery -->
+
+   <!--** 以下Firebase **-->
+   <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      push,
+      set,
+      onChildAdded,
+      remove,
+      onChildRemoved,
+    } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNsTrraMjvBTSycy7QXwcM4VGLVrPBmZg",
+      authDomain: "gs23-df42d.firebaseapp.com",
+      databaseURL: "https://gs23-df42d-default-rtdb.firebaseio.com",
+      projectId: "gs23-df42d",
+      storageBucket: "gs23-df42d.appspot.com",
+      messagingSenderId: "920359578864",
+      appId: "1:920359578864:web:9050b4a239444c91422635"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app); //RealtimeDBに接続
+    const dbRef = ref(db,"LINE風アプリ"); //RealtimeDB内の"chat"を使う
+
+
+    //送信のボタンが押されたらデータを登録する処理を書きます
+    $("#send").on("click", function(){
+    // alert(1);
+
+    const uname = $("#uname").val();
+    const text = $("#text").val();
+
+    // 必ず入力されたものが取得できているか、console.logで確認。
+    console.log(uname,"名前");
+    console.log(text, "テキスト")
+    
+    //データの塊を作成
+    const msg = {
+        uname: uname,
+        text: text,
+    }
+
+    const newPostRef = push(dbRef);
+    set(newPostRef, msg);
+
+    //入力欄を空にする
+    $("#uname").val("");　//空にする
+    $("#text").val("");　//空にする
+    
+    // この下は消さない
+    });
+
+    // 受信処理
+    onChildAdded(dbRef, function (data) {
+          const msg = data.val();
+          const kagi = data.key
+          
+          console.log(msg, "dataを取得");
+          console.log(kagi, "鍵");
+
+          let html = `
+           <div class=${kagi}>
+            <p>${msg.uname}</p>
+            <p>${msg.text}</p>
+          `;
+
+          $("#output").append(html);
+        });
+
+        //エンターキーを押しらら送信
+        $("#text").on("keydown", function(e){
+            console.log(e, "イベント");
+            if(e.keycode === 13){
+                alert("aaaa")
+            }
+        });
+
+
+  </script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
